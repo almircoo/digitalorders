@@ -1,5 +1,5 @@
 import { Button } from "../components/ui/button"
-import { MainLayout } from "../components/main-layout"
+import { MainLayout } from "../components/MainLayout"
 
 export default function Home() {
   return (

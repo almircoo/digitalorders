@@ -19,8 +19,8 @@ import Settings from "../pages/Settings"
 import PasswordResetRequest from "../pages/PasswordResetRequest"
 
 // Auth components
-import { PrivateRoute } from "./private-route"
-import { RoleRoute } from "./role-route"
+import { PrivateRoute } from "./PrivateRoute"
+import { RoleRoute } from "./RoleRoute"
 
 function App() {
   return (

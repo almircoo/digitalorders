@@ -3,7 +3,7 @@
 // Generate random number between min and max (inclusive)
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
-// Generate random data for a time series (daily, weekly, monthly)
+// Genera random data para semana, dia y por mes
 export const generateTimeSeriesData = (days, minValue, maxValue, trend = "random") => {
   const data = []
   let lastValue = randomInt(minValue, maxValue)
@@ -41,20 +41,20 @@ export const generateTimeSeriesData = (days, minValue, maxValue, trend = "random
   return data
 }
 
-// Generate mock data for restaurant analytics
+// Generate simluacion data for restaurant analytics
 export const generateRestaurantAnalytics = () => {
-  // Orders data - last 30 days
+  // pedidos de los ultimos d30 dias
   const orderData = generateTimeSeriesData(30, 5, 25, "up")
   const totalOrders = orderData.reduce((sum, item) => sum + item.value, 0)
 
-  // Revenue data - last 30 days
+  // Ingreso de ultimos 30 dias
   const revenueData = orderData.map((item) => ({
     date: item.date,
     value: item.value * randomInt(30, 80), // Average order value between 30-80
   }))
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.value, 0)
 
-  // Top products
+  // productos mas pedidos
   const topProducts = [
     { name: "Manzanas", quantity: randomInt(50, 200), revenue: randomInt(200, 800) },
     { name: "Plátanos", quantity: randomInt(40, 180), revenue: randomInt(150, 700) },
@@ -63,7 +63,7 @@ export const generateRestaurantAnalytics = () => {
     { name: "Zanahorias", quantity: randomInt(15, 120), revenue: randomInt(80, 400) },
   ].sort((a, b) => b.revenue - a.revenue)
 
-  // Top providers
+  // provvedores que mas entergas hicieorm
   const topProviders = [
     { name: "Proveedor Frutas S.A.", orders: randomInt(10, 50), spending: randomInt(500, 2000) },
     { name: "Verduras Express", orders: randomInt(8, 45), spending: randomInt(400, 1800) },
@@ -72,7 +72,7 @@ export const generateRestaurantAnalytics = () => {
     { name: "Productos del Campo", orders: randomInt(4, 30), spending: randomInt(200, 1200) },
   ].sort((a, b) => b.spending - a.spending)
 
-  // Order status distribution
+  // stado de la apropacion de los orders
   const orderStatusData = [
     { name: "Registrado", value: randomInt(5, 15) },
     { name: "Aprobado", value: randomInt(10, 20) },
@@ -81,7 +81,7 @@ export const generateRestaurantAnalytics = () => {
     { name: "Entregado", value: randomInt(40, 60) },
   ]
 
-  // Monthly comparison (last 6 months)
+  // monparacion mensual de los ultmos meses
   const monthlyComparison = []
   for (let i = 5; i >= 0; i--) {
     const date = new Date()
@@ -111,17 +111,18 @@ export const generateRestaurantAnalytics = () => {
   }
 }
 
-// Generate mock data for provider analytics
+// funcion para implenatr analitics del provvedor
 export const generateProviderAnalytics = () => {
-  // Sales data - last 30 days
+  // vetas de los ultimos 30 dias
   const salesData = generateTimeSeriesData(30, 8, 35, "up")
   const totalSales = salesData.reduce((sum, item) => sum + item.value, 0)
 
-  // Revenue data - last 30 days
+  // ingresos de los ultimos 30 dias
   const revenueData = salesData.map((item) => ({
     date: item.date,
-    value: item.value * randomInt(40, 100), // Average sale value between 40-100
+    value: item.value * randomInt(40, 100), // Valor medio de venta entre 40-100
   }))
+  //summa todos los ingresos
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.value, 0)
 
   // Top products
@@ -133,7 +134,7 @@ export const generateProviderAnalytics = () => {
     { name: "Zanahorias Orgánicas", quantity: randomInt(40, 200), revenue: randomInt(250, 1200) },
   ].sort((a, b) => b.revenue - a.revenue)
 
-  // Top customers (restaurants)
+  // Top customers
   const topCustomers = [
     { name: "Restaurante El Gourmet", orders: randomInt(15, 60), revenue: randomInt(800, 3000) },
     { name: "Cocina Peruana", orders: randomInt(12, 50), revenue: randomInt(700, 2500) },
@@ -142,7 +143,7 @@ export const generateProviderAnalytics = () => {
     { name: "Delicias Criollas", orders: randomInt(6, 35), revenue: randomInt(400, 1800) },
   ].sort((a, b) => b.revenue - a.revenue)
 
-  // Product category distribution
+  // Products por categorya
   const categoryData = [
     { name: "Frutas", value: randomInt(30, 45) },
     { name: "Verduras", value: randomInt(25, 40) },
@@ -151,7 +152,7 @@ export const generateProviderAnalytics = () => {
     { name: "Otros", value: randomInt(5, 10) },
   ]
 
-  // Monthly comparison (last 6 months)
+  // comparacion de los ultimos 6 meses
   const monthlyComparison = []
   for (let i = 5; i >= 0; i--) {
     const date = new Date()
@@ -191,13 +192,14 @@ export const generateProviderAnalytics = () => {
   }
 }
 
-// Calculate percentage change between two values
+// calcula el ponecnatge de cambios entre 2 valores
 export const calculatePercentageChange = (current, previous) => {
-  if (previous === 0) return current > 0 ? 100 : 0
+  if (previous === 0) return 
+  current > 0 ? 100 : 0
   return (((current - previous) / previous) * 100).toFixed(1)
 }
 
-// Format currency values
+// Formatea los valores a 2 digitos
 export const formatCurrency = (value) => {
   return `S/. ${Number(value).toFixed(2)}`
 }

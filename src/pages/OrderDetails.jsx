@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
@@ -6,8 +6,8 @@ import { CheckCircle, Clock, Package, Truck } from "lucide-react"
 
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { MainLayout } from "../components/main-layout"
-import { useOrders } from "../contexts/order-context"
+import { MainLayout } from "../components/MainLayout"
+import { useOrders } from "../contexts/OrderContext"
 
 export default function OrderDetails() {
   const params = useParams()

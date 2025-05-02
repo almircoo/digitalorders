@@ -6,15 +6,7 @@ import { login } from "../services/api"
 
 const AuthContext = createContext(undefined)
 
-// Helper function to safely parse JSON
-// const safeJsonParse = (str, fallback = null) => {
-//   try {
-//     return str ? JSON.parse(str) : fallback
-//   } catch (e) {
-//     console.error("Error parsing JSON:", e)
-//     return fallback
-//   }
-// }
+
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate()

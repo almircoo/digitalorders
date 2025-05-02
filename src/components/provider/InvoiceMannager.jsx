@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -105,13 +105,13 @@ export function InvoiceManagement() {
     file: null,
   })
 
-  // Filter orders based on search term
+  // Filtra los pedidos basados en una busqueda -> penediente implemntar
   const filteredOrders = orders.filter((order) => {
     const searchLower = searchTerm.toLowerCase()
     return order.id.toLowerCase().includes(searchLower) || order.restaurant.toLowerCase().includes(searchLower)
   })
 
-  // Filter invoices based on active tab and search term
+  // Filtra las facturas 
   const filteredInvoices = invoices.filter((invoice) => {
     const searchLower = searchTerm.toLowerCase()
     const matchesSearch =

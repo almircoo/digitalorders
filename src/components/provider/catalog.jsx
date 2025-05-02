@@ -1,4 +1,3 @@
-"use client"
 
 import { Badge } from "../ui/badge"
 
@@ -83,10 +82,7 @@ export function ProviderCatalog() {
     fetchCatalogs()
   }, [activeCatalogId])
 
-  // Remove localStorage loading effect
-
-  // Remove localStorage saving effect
-
+  // Crea los catalogos 
   const handleCreateCatalog = async () => {
     if (!newCatalogName.trim()) {
       toast({
@@ -128,6 +124,7 @@ export function ProviderCatalog() {
     }
   }
 
+  // agrega items al catalgo
   const handleAddItem = () => {
     if (!activeCatalogId) return
     if (!newItemName.trim()) {
@@ -161,7 +158,7 @@ export function ProviderCatalog() {
 
     setNewItemName("")
   }
-
+  // Cambia los valores items 
   const handleItemChange = (index, field, value) => {
     if (!activeCatalogId) return
 
@@ -182,7 +179,7 @@ export function ProviderCatalog() {
       }
     })
   }
-
+  // Publica el catalaogo
   const handlePublishCatalog = async () => {
     if (!activeCatalogId) return
 
@@ -211,7 +208,7 @@ export function ProviderCatalog() {
       })
     }
   }
-
+  // Verfica que este el catalogo
   const activeCatalog = activeCatalogId ? catalogs[activeCatalogId] : null
 
   return (
@@ -220,7 +217,7 @@ export function ProviderCatalog() {
         <h2 className="text-2xl font-bold">Gestionar Catálogos</h2>
       </div>
 
-      {/* Catalog Selection */}
+      {/* Catalogo  */}
       <div className="flex flex-wrap gap-4">
         {Object.values(catalogs).map((catalog) => (
           <Button
@@ -233,7 +230,7 @@ export function ProviderCatalog() {
             <span className="text-xs">{catalog.name}</span>
           </Button>
         ))}
-
+        {/* Dialog para crear nuevo catalogo */}
         <Dialog open={newCatalogOpen} onOpenChange={setNewCatalogOpen}>
           <DialogTrigger asChild>
             <Button
@@ -286,7 +283,7 @@ export function ProviderCatalog() {
         </Dialog>
       </div>
 
-      {/* Active Catalog */}
+      {/* catalogo activo, (ya creado) */}
       {activeCatalog && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">

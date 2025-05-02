@@ -3,13 +3,13 @@ import { createContext, useState, useContext } from "react"
 
 const CartContext = createContext(undefined)
 
-// Initialize with empty array instead of loading from localStorage
+// Inicializar con un array vacio 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
 
   // Add item to cart
   const addItem = (item) => {
-    // Check if item already exists
+    // verifica si hay items
     const existingIndex = items.findIndex((i) => i.id === item.id)
 
     if (existingIndex >= 0) {

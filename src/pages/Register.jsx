@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
-import { MainLayout } from "../components/main-layout"
+import { MainLayout } from "../components/MainLayout"
 import { useToast } from "../components/ui/use-toast"
 
 export default function Register() {

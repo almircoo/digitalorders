@@ -1,4 +1,4 @@
-"use client"
+
 import { ClipboardListIcon, TruckIcon, ClipboardCheckIcon, InboxIcon, BuildingIcon } from "lucide-react"
 import { Button } from "./ui/button"
 
@@ -16,7 +16,7 @@ export function OrderTracking({ orderId, status, onUpdateStatus, readOnly = fals
   return (
     <div className="w-full">
       <div className="relative mb-8 mt-4">
-        {/* Progress bar */}
+        {/* barra de prgroso */}
         <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-muted"></div>
 
         {/* Steps */}

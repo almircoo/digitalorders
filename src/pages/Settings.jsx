@@ -1,12 +1,12 @@
-"use client"
+
 
 import { useState } from "react"
-import { MainLayout } from "../components/main-layout"
+import { MainLayout } from "../components/MainLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Card, CardContent } from "../components/ui/card"
-import { ProfileForm } from "../components/settings/profile-form"
-import { PasswordForm } from "../components/settings/password-form"
-import { useAuth } from "../contexts/auth-context"
+import { ProfileForm } from "../components/settings/ProfileForm"
+import { PasswordForm } from "../components/settings/PasswordForm"
+import { useAuth } from "../contexts/AuthContext"
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile")

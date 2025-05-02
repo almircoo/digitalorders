@@ -1,7 +1,7 @@
 // se encarga de proteger rutas que requieren que el usuario esté autenticado, 
 // independientemente de su rol (restaurant o provider).
 import { Navigate, useLocation } from "react-router-dom"
-import { useAuth } from "../contexts/auth-context"
+import { useAuth } from "../contexts/AuthContext"
 
 export function PrivateRoute({ children }) {
   const { isAuthenticated, loading } = useAuth()

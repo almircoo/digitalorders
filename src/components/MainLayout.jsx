@@ -1,4 +1,4 @@
-import { MainNav } from "./main-nav"
+import { MainNav } from "./MainNav"
 import { Footer } from "./Footer"
 
 export function MainLayout({ children }) {

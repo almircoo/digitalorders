@@ -1,12 +1,12 @@
 // extiende la funcionalidad de la ruta privada, 
 // añadiendo verificación de roles específicos a restaurnat y provider.
 import { Navigate, useLocation } from "react-router-dom"
-import { useAuth } from "../contexts/auth-context"
+import { useAuth } from "../contexts/AuthContext"
 import { useToast } from "../components/ui/use-toast"
 import { useEffect } from "react"
 
 export function RoleRoute({ children, allowedRoles }) {
-  const { isAuthenticated, loading, user, getUserRole } = useAuth()
+  const { isAuthenticated, loading, getUserRole } = useAuth()
   const location = useLocation()
   const { toast } = useToast()
 

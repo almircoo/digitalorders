@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useNavigate } from "react-router-dom"
 import { Trash2 } from "lucide-react"
@@ -6,9 +6,9 @@ import { Trash2 } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
-import { MainLayout } from "../components/main-layout"
-import { useCart } from "../contexts/cart-context"
-import { useOrders } from "../contexts/order-context"
+import { MainLayout } from "../components/MainLayout"
+import { useCart } from "../contexts/CartContext"
+import { useOrders } from "../contexts/OrderContext"
 import { useToast } from "../components/ui/use-toast"
 
 export default function Cart() {

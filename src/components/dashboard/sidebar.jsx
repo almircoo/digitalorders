@@ -1,4 +1,3 @@
-"use client"
 
 import { Link, useLocation } from "react-router-dom"
 import { LogOut } from "lucide-react"
@@ -8,7 +7,7 @@ import { Button } from "../ui/button"
 import { Card } from "../ui/card"
 import { useToast } from "../ui/use-toast"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../../contexts/auth-context"
+import { useAuth } from "../../contexts/AuthContext"
 
 export function Sidebar({ items, userInfo }) {
   const location = useLocation()

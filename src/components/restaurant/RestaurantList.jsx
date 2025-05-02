@@ -1,20 +1,19 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { PlusCircle, Search, ShoppingCart, X } from "lucide-react"
-import { Button } from "./ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "./ui/dialog"
-import { useToast } from "./ui/use-toast"
+import { Button } from "../ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
+import { useToast } from "../ui/use-toast"
 import { useNavigate } from "react-router-dom"
-import { useCart } from "../contexts/cart-context"
+import { useCart } from "../../contexts/CartContext"
 
 // Update the RestaurantList component to use the API service
-// 1. Import the API functions at the top of the file:
-import { getLists, createList, updateList } from "../services/api"
-import { getCatalogs } from "../services/api"
+// Import the API functions at the top of the file:
+import { getLists, createList, updateList } from "../../services/api"
+import { getCatalogs } from "../../services/api"
 
 const categories = [
   { id: 1, icon: "🥩", name: "Carnes" },
@@ -28,31 +27,6 @@ const categories = [
   { id: 9, icon: "🧹", name: "Limpieza" },
 ]
 
-// Sample data for provider catalogs
-// const sampleCatalogs = {
-//   "list-1": {
-//     id: "list-1",
-//     name: "List 1",
-//     category: 2,
-//     items: [
-//       { name: "Manzana", quality: "Premium", unit: "kg", price: 5.99 },
-//       { name: "Plátano", quality: "Estándar", unit: "kg", price: 3.99 },
-//       { name: "Naranja", quality: "Premium", unit: "kg", price: 4.5 },
-//     ],
-//     published: true,
-//   },
-//   "list-2": {
-//     id: "list-2",
-//     name: "List 2",
-//     category: 3,
-//     items: [
-//       { name: "Zanahoria", quality: "Orgánica", unit: "kg", price: 2.99 },
-//       { name: "Tomate", quality: "Premium", unit: "kg", price: 6.5 },
-//       { name: "Lechuga", quality: "Fresca", unit: "kg", price: 3.25 },
-//     ],
-//     published: true,
-//   },
-// }
 
 export function RestaurantList() {
   const { toast } = useToast()
@@ -112,7 +86,7 @@ export function RestaurantList() {
     fetchData()
   }, [activeListId])
 
-  // Filter products based on search term
+  // Filter productos basados en los ya existentes
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setFilteredProducts([])
@@ -126,6 +100,7 @@ export function RestaurantList() {
     setFilteredProducts(filtered.slice(0, 5))
   }, [searchTerm, availableProducts])
 
+  // maneja la creacion de la lista
   const handleCreateList = async () => {
     if (!newListName.trim()) {
       toast({
@@ -165,7 +140,7 @@ export function RestaurantList() {
       })
     }
   }
-
+  // Maneja el agregado de productos en la lista
   const handleAddProduct = (product) => {
     if (!activeListId) return
 
@@ -197,6 +172,7 @@ export function RestaurantList() {
     })
   }
 
+  // Maneja los cambios a realizar a los campos del producto (itemes)
   const handleItemChange = async (index, field, value) => {
     if (!activeListId) return
 
@@ -222,6 +198,7 @@ export function RestaurantList() {
     }
   }
 
+  // Agrega la lista al carrito
   const handleAddToCart = () => {
     if (!activeListId || !lists[activeListId]?.items.length) {
       toast({
@@ -248,6 +225,7 @@ export function RestaurantList() {
     navigate("/cart")
   }
 
+  // verifica que las listas esten activas
   const activeList = activeListId ? lists[activeListId] : null
 
   return (

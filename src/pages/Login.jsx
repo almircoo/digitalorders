@@ -9,8 +9,8 @@ import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Checkbox } from "../components/ui/checkbox"
-import { MainLayout } from "../components/main-layout"
-import { useAuth } from "../contexts/auth-context"
+import { MainLayout } from "../components/MainLayout"
+import { useAuth } from "../contexts/AuthContext"
 import { useToast } from "../components/ui/use-toast"
 
 export default function Login() {

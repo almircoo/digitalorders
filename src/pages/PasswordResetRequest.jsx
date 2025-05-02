@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -7,7 +7,7 @@ import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { useToast } from "../components/ui/use-toast"
-import { MainLayout } from "../components/main-layout"
+import { MainLayout } from "../components/MainLayout"
 import { requestPasswordReset } from "../lib/api"
 
 export default function PasswordResetRequest() {

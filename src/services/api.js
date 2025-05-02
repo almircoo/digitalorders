@@ -239,6 +239,7 @@ export async function getCatalogs() {
   return request("/catalogs")
 }
 
+// endponit para crear catalogos
 export async function createCatalog(catalogData) {
   return request("/catalogs", {
     data: catalogData,
@@ -246,8 +247,7 @@ export async function createCatalog(catalogData) {
   })
 }
 
-// Funciones específicas para endpoints de pedidos
-// Order API functions - these will always use mock data
+// Funciones  para endpoints de pedidos para actualizar catalogo
 export async function updateCatalog(catalogId, catalogData) {
   return request(`/catalogs/${catalogId}`, {
     data: catalogData,
@@ -260,13 +260,14 @@ export async function getOrders() {
   return request("/orders")
 }
 
+// request para crear orders
 export async function createOrder(orderData) {
   return request("/orders", {
     data: orderData,
     method: "POST",
   })
 }
-
+// request para actaulizar orsder status
 export async function updateOrderStatus(orderId, status) {
   return request(`/orders/${orderId}/status`, {
     data: { status },
@@ -274,7 +275,7 @@ export async function updateOrderStatus(orderId, status) {
   })
 }
 
-// Shopping list API functions - these will always use mock data
+// list de datos 
 export async function getLists() {
   return request("/lists")
 }

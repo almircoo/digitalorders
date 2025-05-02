@@ -1,6 +1,5 @@
-"use client"
 
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ShoppingCart, Search, User } from "lucide-react"
 
 import { Button } from "./ui/button"
@@ -12,12 +11,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { useAuth } from "../contexts/auth-context"
-import { useCart } from "../contexts/cart-context"
+import { useAuth } from "../contexts/AuthContext"
+import { useCart } from "../contexts/CartContext"
 
 export function MainNav() {
   const navigate = useNavigate()
-  // const location = useLocation()
   const { user, isAuthenticated, signOut } = useAuth()
   const { itemCount } = useCart()
 

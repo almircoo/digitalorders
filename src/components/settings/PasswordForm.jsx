@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { Button } from "../ui/button"
@@ -6,7 +6,7 @@ import { Input } from "../ui/input"
 import { useToast } from "../ui/use-toast"
 import { Loader2 } from "lucide-react"
 import { changePassword } from "../../lib/api"
-import { useAuth } from "../../contexts/auth-context"
+import { useAuth } from "../../contexts/AuthContext"
 
 export function PasswordForm() {
   const { toast } = useToast()

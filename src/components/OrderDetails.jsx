@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
-import { OrderTracking } from "./order-tracking"
+import { OrderTracking } from "./OrderTracking"
 
 export function OrderDetails({ order, onUpdateStatus, isProvider = false }) {
   const [open, setOpen] = useState(false)
