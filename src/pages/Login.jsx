@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
+import { useState} from "react"
+import { Link, useNavigate} from "react-router-dom"
+import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "../components/ui/button"
@@ -9,100 +10,62 @@ import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Checkbox } from "../components/ui/checkbox"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 import { useAuth } from "../contexts/AuthContext"
 import { useToast } from "../components/ui/use-toast"
 
 export default function Login() {
+
   const navigate = useNavigate()
-  const location = useLocation()
-  const { signIn, loading, isAuthenticated, user } = useAuth()
+  // const location = useLocation()
+  const { signIn } = useAuth()
   const { toast } = useToast()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
   const [role, setRole] = useState("restaurant")
   const [rememberMe, setRememberMe] = useState(false)
-  const [redirecting, setRedirecting] = useState(false)
 
-  // Get the redirect path from location state or default to home
-  const from = location.state?.from?.pathname || "/"
+  // navega por defest al home
+  // const from = location.state?.from?.pathname || "/"
 
-  // Check if already authenticated and redirect if needed
-  useEffect(() => {
-    if (isAuthenticated && user && !redirecting) {
-      setRedirecting(true)
-      const roleBasedPath = `/${user.role}-panel`
-      console.log(`Already authenticated as ${user.role}, redirecting to ${roleBasedPath}`)
+  // React Hook Form setup
+  const {register, handleSubmit, formState: { errors },} = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
-      // Small delay to ensure state updates have propagated
-      setTimeout(() => {
-        navigate(roleBasedPath, { replace: true })
-      }, 100)
-    }
-  }, [isAuthenticated, user, navigate, redirecting])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setRedirecting(false)
+  const onSubmit = async (data) => {
+    setLoading(true)
 
     try {
-      console.log("Submitting login form...")
-      const success = await signIn(email, password, role, rememberMe)
+      // simula llamda progacion de api
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Llamar a la función signIn desde el authContext
+      const success = await signIn(data.email, data.password, role, rememberMe)
 
       if (success) {
-        console.log("Login successful, preparing to redirect...")
-        setRedirecting(true)
+        toast({
+          title: "Login successful",
+          description: "Welcome back!",
+        })
 
-        // Small delay to ensure auth state is updated
-        setTimeout(() => {
-          // If there was an attempted access to a specific page, go there
-          // Otherwise redirect based on role
-          if (from !== "/") {
-            console.log(`Redirecting to previously attempted page: ${from}`)
-            navigate(from, { replace: true })
-          } else {
-            // Role-based redirect
-            const roleBasedPath = `/${role}-panel`
-            console.log(`Redirecting to role-based path: ${roleBasedPath}`)
-            navigate(roleBasedPath, { replace: true })
-
-            toast({
-              title: "Welcome back!",
-              description: `You've been redirected to your ${role} dashboard.`,
-            })
-          }
-        }, 500)
+        // Redirige al panel segun registro
+        const roleBasedPath = `/${role}-panel`
+        navigate(roleBasedPath, { replace: true })
       }
     } catch (error) {
-      console.error("Login error:", error)
-      setRedirecting(false)
       toast({
         title: "Login failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: "Please check your credentials and try again",
         variant: "destructive",
       })
+    } finally {
+      setLoading(false)
     }
   }
 
-  // const navigate = useNavigate();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [role, setRole] = useState("restaurant");
-
-  // //validador de rutas
-  // const auth = useContext(useAuth);
-
-  // // redireciona al perfil a cada perfil (restaurant , provider)
-  // useEffect(()=> {
-  //     if(auth.accessToken && auth.refreshToken){
-  //         navigate(`/${role}-panel`);
-  //     }
-  // })
-  // // funcion bootn para validar el regsitro
-  // const handleSubmit = ()=>{
-  //     auth.signIn(email, password, role, () => navigate(`/${role}-panel`));
-  //     console.log()
-  // }
 
   return (
     <MainLayout>
@@ -113,20 +76,37 @@ export default function Login() {
             <CardDescription>Ingrese sus credenciales para acceder a su cuenta</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Correo</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <Input
+                  id="email"
+                  type="email"
+                  {...register("email", {
+                    required: "Email is requirido",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Correo Invalido",
+                    },
+                  })}
+                />
+                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+                {/* <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /> */}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña</Label>
                 <Input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  {...register("password", {
+                    required: "Password ies requirido",
+                    minLength: {
+                      value: 8,
+                      message: "La contraseña debe tener al menos 8 caracteres",
+                    },
+                  })}
                 />
+                {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="role">Tipo de Cuenta</Label>

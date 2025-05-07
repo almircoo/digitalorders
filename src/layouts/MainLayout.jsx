@@ -1,5 +1,5 @@
-import { MainNav } from "./MainNav"
-import { Footer } from "./Footer"
+import { MainNav } from "../components/MainNav"
+import { Footer } from "../components/Footer"
 
 export function MainLayout({ children }) {
   return (

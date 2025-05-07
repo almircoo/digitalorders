@@ -1,28 +1,29 @@
-
-
 import { useNavigate } from "react-router-dom"
 import { Trash2 } from "lucide-react"
 
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 import { useCart } from "../contexts/CartContext"
-import { useOrders } from "../contexts/OrderContext"
+// import { useOrders } from "../contexts/OrderContext"
 import { useToast } from "../components/ui/use-toast"
 
 export default function Cart() {
   const navigate = useNavigate()
-  const { items, removeItem, updateQuantity, clearCart, total } = useCart()
-  const { addOrder } = useOrders()
+  const { items, removeItem, updateQuantity, total } = useCart()
+  // const { addOrder } = useOrders()
   const { toast } = useToast()
-
+  // Verificamos que sea un número válido y mayor a cero
   const handleQuantityChange = (index, value) => {
-    const quantity = Number.parseInt(value)
+    const quantity = Number.parseInt(value) // combierte el dato string a 
     if (!isNaN(quantity) && quantity > 0) {
+      // ctualizamos la cantidad
       updateQuantity(index, quantity)
     }
   }
+
+  // rgb(40, 67, 59)
 
   const handleCheckout = () => {
     if (items.length === 0) {
@@ -33,26 +34,9 @@ export default function Cart() {
       })
       return
     }
-
-    const order = {
-      restaurant: "Restaurante Demo", // In a real app, fetch from user profile
-      location: "Lima, Perú",
-      items,
-      total: total.toFixed(2),
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-      status: "Registrado",
-    }
-
-    const orderId = addOrder(order)
-    clearCart()
-
-    toast({
-      title: "Pedido realizado",
-      description: "Tu pedido ha sido registrado y está siendo procesado",
-    })
-
-    navigate(`/orders/${orderId}`)
+    // clearCart()
+    navigate("/checkout")
+    
   }
 
   return (
@@ -116,7 +100,7 @@ export default function Cart() {
 
                 <div className="mt-8 text-center">
                   <Button className="btn-standard w-full md:w-auto px-8 py-2" onClick={handleCheckout}>
-                    Realizar Pedido
+                    Proceder al Pago
                   </Button>
                 </div>
               </>

@@ -1,21 +1,17 @@
-/**
-  Servicio de API
- 
- Este módulo proporciona funciones para comunicarse con el backend a través de una API REST.
- Implementa un modo de previsualización que utiliza datos simulados cuando no hay conexión al backend.
- Maneja errores de red, CORS y otros problemas comunes en las solicitudes HTTP.
+/*
+En lugar de hacer peticiones a un servidor real,
+este servicio simula respuestas usando datos de ejemplo.
+En una aplicación real, estas funciones harían peticiones HTTP
+a un servidor backend.
  */
-// API service for making requests to the backend
-const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL
-console.log('load api url:', API_BASE_URL)
 
-// Datos de ejemplo para el modo de previsualización
-// Se utilizan cuando no hay conexión al backend o para endpoints no implementados
-const sampleData = {
-  catalogs: {
-    "catalog-1": {
+// Datos de ejemplo para la aplicación
+const mockData = {
+  // Catálogos de productos
+  catalogs: [
+    {
       id: "catalog-1",
-      name: "Catálogo 1",
+      name: "Catálogo de Frutas",
       category: 2,
       items: [
         { name: "Manzana", quality: "Premium", unit: "kg", price: 5.99 },
@@ -24,9 +20,9 @@ const sampleData = {
       ],
       published: true,
     },
-    "catalog-2": {
+    {
       id: "catalog-2",
-      name: "Catálogo 2",
+      name: "Catálogo de Verduras",
       category: 3,
       items: [
         { name: "Zanahoria", quality: "Orgánica", unit: "kg", price: 2.99 },
@@ -35,7 +31,20 @@ const sampleData = {
       ],
       published: true,
     },
-  },
+    {
+      id: "catalog-3",
+      name: "Catálogo de Lácteos",
+      category: 4,
+      items: [
+        { name: "Leche", quality: "Entera", unit: "L", price: 4.25 },
+        { name: "Queso", quality: "Fresco", unit: "kg", price: 12.99 },
+        { name: "Yogurt", quality: "Natural", unit: "L", price: 5.75 },
+      ],
+      published: true,
+    },
+  ],
+
+  // Pedidos
   orders: [
     {
       id: "order-123456",
@@ -50,196 +59,203 @@ const sampleData = {
       time: "14:30:00",
       status: "Registrado",
     },
+    {
+      id: "order-789012",
+      restaurant: "Restaurante Demo",
+      location: "Lima, Perú",
+      items: [
+        { name: "Zanahoria", quality: "Orgánica", quantity: 1, unit: "kg", price: 2.99 },
+        { name: "Tomate", quality: "Premium", quantity: 2, unit: "kg", price: 6.5 },
+      ],
+      total: "15.99",
+      date: "2023-05-02",
+      time: "10:15:00",
+      status: "En Proceso",
+    },
   ],
-  lists: {
-    "list-1": {
+
+  // Listas de compras
+  lists: [
+    {
       id: "list-1",
-      name: "Lista 1",
+      name: "Lista de Compras",
       category: 2,
       items: [],
     },
-  },
+  ],
+
+  // Usuarios
+  users: [
+    {
+      id: "1",
+      email: "restaurant@email.com",
+      firstName: "John",
+      lastName: "Doe",
+      role: "restaurant",
+    },
+    {
+      id: "2",
+      email: "provider@email.com",
+      firstName: "Jane",
+      lastName: "Smith",
+      role: "provider",
+    },
+  ],
 }
 
-/**
- * Funciones para realizar solicitudes a la API
- 
-  {string} endpoint - Ruta del endpoint (sin la URL base)
-  {Object} options - Opciones de la solicitud
-  {Object} [options.data=null] - Datos a enviar en la solicitud
-  {string} [options.token=null] - Token de autenticación
-  {string} [options.method="GET"] - Método HTTP (GET, POST, PUT, DELETE)
-  {Promise<any>} (objeto) Respuesta de la API o datos simulados
- 
-*/
-export async function request(endpoint, { data = null, token = null, method = "GET" } = {}) {
-  // Only use real API for authentication endpoints
-  const isAuthEndpoint = endpoint.startsWith("/auth")
+// Función principal para simular peticiones a la API
 
-  // Determinar si usar la API real o datos simulados
-  // Solo se usa la API real para endpoints de autenticación y si la URL base está definida
-  if (!isAuthEndpoint || !API_BASE_URL) {
-    console.log(`Using mock response for ${method} ${endpoint}`)
-    return handleMockRequest(endpoint, { data, method })
+export async function request(endpoint, { data = null, method = "GET" } = {}) {
+  console.log(`API Simulada: ${method} ${endpoint}`)
+
+
+  // === AUTENTICACIÓN ===
+  if (endpoint === "/auth/login") {
+    const { email, role } = data || {}
+
+    // Buscar usuario con el email y rol indicados
+    const user = mockData.users.find((u) => u.email === email && u.role === role)
+
+    if (user) {
+      // Simular inicio de sesión exitoso
+      return {
+        accessToken: "token-de-ejemplo",
+        refreshToken: "refresh-token-de-ejemplo",
+        user,
+      }
+    } else {
+      // Simular error de autenticación
+      throw new Error("Credenciales inválidas")
+    }
   }
 
-  // For auth endpoints with API_BASE_URL defined, make real API calls
-  const url = `${API_BASE_URL}${endpoint}`
-  console.log(`Making ${method} request to: ${url}`)
-  // Configurar la solicitud HTTP con las opciones adecuadas
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        Authorization: token ? `Bearer ${token}` : "",
-        "Content-Type": "application/json",
-      },
-      
-      body: method !== "GET" && method !== "DELETE" && data ? JSON.stringify(data) : null,
-    })
-
-    console.log(`Response status: ${response.status}`)
-
-    // If response is successful
-    if (response.ok) {
-      if (method === "DELETE") {
-        return true
+  // === CATÁLOGOS ===
+  if (endpoint === "/catalogs") {
+    if (method === "GET") {
+      // Devolver todos los catálogos
+      return [...mockData.catalogs]
+    } else if (method === "POST" && data) {
+      // Crear un nuevo catálogo
+      const newCatalog = {
+        id: `catalog-${Date.now()}`, // ID único basado en la fecha
+        ...data,
       }
-      return await response.json()
+      mockData.catalogs.push(newCatalog)
+      return newCatalog
     }
-
-    // Handle error responses
-    try {
-      const errorData = await response.json()
-      console.error("API error response:", errorData)
-
-      throw {
-        message: errorData.message || response.statusText,
-        status: response.status,
-        errors: errorData,
-      }
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        console.error("Failed to parse error response as JSON")
-        throw { message: response.statusText, status: response.status }
-      }
-      throw e
-    }
-  } catch (error) {
-    console.error("Request failed:", error)
-
-    // Para los puntos finales de autenticación, si la llamada a la API falla, se recurre a datos simulados.
-    // Esto permite que la aplicación funcione incluso si la API no funciona.
-    if (isAuthEndpoint) {
-      console.warn("Authentication API failed, falling back to mock data")
-      return handleMockRequest(endpoint, { data, method })
-    }
-
-    throw error
   }
+
+  // Obtener un catálogo específico por ID
+  if (endpoint.startsWith("/catalogs/") && method === "GET") {
+    const catalogId = endpoint.split("/")[2]
+    const catalog = mockData.catalogs.find((c) => c.id === catalogId)
+    return catalog || null
+  }
+
+  // Actualizar un catálogo
+  if (endpoint.startsWith("/catalogs/") && method === "PUT") {
+    const catalogId = endpoint.split("/")[2]
+    const catalogIndex = mockData.catalogs.findIndex((c) => c.id === catalogId)
+
+    if (catalogIndex !== -1) {
+      // Actualizar el catálogo existente
+      mockData.catalogs[catalogIndex] = {
+        ...mockData.catalogs[catalogIndex],
+        ...data,
+      }
+      return mockData.catalogs[catalogIndex]
+    }
+
+    throw new Error("Catálogo no encontrado")
+  }
+
+  // === ÓRDENES ===
+  if (endpoint === "/orders") {
+    if (method === "GET") {
+      // Devolver todas las órdenes
+      return [...mockData.orders]
+    } else if (method === "POST" && data) {
+      // Crear una nueva orden
+      const newOrder = {
+        id: `order-${Date.now()}`, // ID único basado en la fecha
+        ...data,
+        status: "Registrado", // Estado inicial de toda orden
+      }
+      mockData.orders.push(newOrder)
+      return newOrder
+    }
+  }
+
+  // Actualizar el estado de una orden
+  if (endpoint.startsWith("/orders/") && endpoint.endsWith("/status") && method === "PUT") {
+    const orderId = endpoint.split("/")[2]
+    const orderIndex = mockData.orders.findIndex((o) => o.id === orderId)
+
+    if (orderIndex !== -1) {
+      // Actualizar el estado de la orden
+      mockData.orders[orderIndex].status = data.status
+      return mockData.orders[orderIndex]
+    }
+
+    throw new Error("Orden no encontrada")
+  }
+
+  // === LISTAS DE COMPRAS ===
+  if (endpoint === "/lists") {
+    if (method === "GET") {
+      // Devolver todas las listas
+      return [...mockData.lists]
+    } else if (method === "POST" && data) {
+      // Crear una nueva lista
+      const newList = {
+        id: `list-${Date.now()}`, // ID único basado en la fecha
+        ...data,
+      }
+      mockData.lists.push(newList)
+      return newList
+    }
+  }
+
+  // Actualizar una lista
+  if (endpoint.startsWith("/lists/") && method === "PUT") {
+    const listId = endpoint.split("/")[2]
+    const listIndex = mockData.lists.findIndex((l) => l.id === listId)
+
+    if (listIndex !== -1) {
+      // Actualizar la lista existente
+      mockData.lists[listIndex] = {
+        ...mockData.lists[listIndex],
+        ...data,
+      }
+      return mockData.lists[listIndex]
+    }
+
+    throw new Error("Lista no encontrada")
+  }
+
+  // Si llegamos aquí, el endpoint no está implementado
+  return { message: "Endpoint no implementado en modo simulado" }
 }
 
-/**
-Maneja solicitudes simuladas para el modo de previsualización
-- endpont - Ruta del endpoint
-- opcions - Opciones de la solicitud
-Datos simulados según el endpoint
-
-*/
-function handleMockRequest(endpoint, { data, method }) {
-  return new Promise((resolve) => {
-    // Simulate network delay
-    setTimeout(() => {
-      // Auth endpoints
-      if (endpoint === "/auth/login") {
-        resolve({
-          accessToken: "mock-access-token",
-          refreshToken: "mock-refresh-token",
-          user: {
-            id: "1",
-            email: data?.email || "user@example.com",
-            firstName: "John",
-            lastName: "Doe",
-            role: data?.role || "restaurant",
-          },
-        })
-      }
-      // Catalog endpoints
-      else if (endpoint === "/catalogs") {
-        if (method === "GET") {
-          resolve(Object.values(sampleData.catalogs))
-        } else if (method === "POST" && data) {
-          const newCatalog = {
-            id: `catalog-${Date.now()}`,
-            ...data,
-            published: false,
-          }
-          sampleData.catalogs[newCatalog.id] = newCatalog
-          resolve(newCatalog)
-        }
-      }
-      // Specific catalog endpoint
-      else if (endpoint.startsWith("/catalogs/") && method === "GET") {
-        const catalogId = endpoint.split("/")[2]
-        resolve(sampleData.catalogs[catalogId] || null)
-      }
-      // Orders endpoints
-      else if (endpoint === "/orders") {
-        if (method === "GET") {
-          resolve(sampleData.orders)
-        } else if (method === "POST" && data) {
-          const newOrder = {
-            id: `order-${Date.now()}`,
-            ...data,
-          }
-          sampleData.orders.push(newOrder)
-          resolve(newOrder)
-        }
-      }
-      // Shopping lists endpoints
-      else if (endpoint === "/lists") {
-        if (method === "GET") {
-          resolve(Object.values(sampleData.lists))
-        } else if (method === "POST" && data) {
-          const newList = {
-            id: `list-${Date.now()}`,
-            ...data,
-            items: [],
-          }
-          sampleData.lists[newList.id] = newList
-          resolve(newList)
-        }
-      }
-      // Default response for unhandled endpoints
-      else {
-        resolve({ message: "Endpoint not implemented in mock mode" })
-      }
-    }, 500)
-  })
-}
-
-// Funciones específicas para endpoints de autenticación
-// Auth API functions
+// Iniciar sesión
 export async function login(email, password, role) {
-  console.log("API Base URL:", API_BASE_URL || "Not defined (using mock data)")
-
   try {
     return request("/auth/login", {
       data: { email, password, role },
       method: "POST",
     })
   } catch (error) {
-    console.error("Login request failed:", error)
+    console.error("Error en solicitud de login:", error)
     throw error
   }
 }
 
-// Funciones para endpoints de catálogos
+//  Obtener todos los catálogos
 export async function getCatalogs() {
   return request("/catalogs")
 }
 
-// endponit para crear catalogos
+// Crear un nuevo catálogo
 export async function createCatalog(catalogData) {
   return request("/catalogs", {
     data: catalogData,
@@ -247,27 +263,26 @@ export async function createCatalog(catalogData) {
   })
 }
 
-// Funciones  para endpoints de pedidos para actualizar catalogo
+//  Actualizar un catálogo existente
 export async function updateCatalog(catalogId, catalogData) {
   return request(`/catalogs/${catalogId}`, {
     data: catalogData,
     method: "PUT",
   })
 }
-
-// Order API functions - these will always use mock data
+// Obtener todas las órdenes
 export async function getOrders() {
   return request("/orders")
 }
-
-// request para crear orders
+// Crear una nueva orden
 export async function createOrder(orderData) {
   return request("/orders", {
     data: orderData,
     method: "POST",
   })
 }
-// request para actaulizar orsder status
+
+// Actualizar el estado de una orden
 export async function updateOrderStatus(orderId, status) {
   return request(`/orders/${orderId}/status`, {
     data: { status },
@@ -275,11 +290,12 @@ export async function updateOrderStatus(orderId, status) {
   })
 }
 
-// list de datos 
+// Obtiene todas las listas
 export async function getLists() {
   return request("/lists")
 }
 
+// Crear una nueva lista
 export async function createList(listData) {
   return request("/lists", {
     data: listData,
@@ -287,6 +303,7 @@ export async function createList(listData) {
   })
 }
 
+// Actualizar una lista existente
 export async function updateList(listId, listData) {
   return request(`/lists/${listId}`, {
     data: listData,

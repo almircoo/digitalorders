@@ -16,7 +16,7 @@ export function Sidebar({ items, userInfo }) {
   const { signOut } = useAuth()
 
   const handleSignOut = () => {
-    // Sign out logic here
+    // aqui logica de logout
     signOut()
     toast({
       title: "Signed out",

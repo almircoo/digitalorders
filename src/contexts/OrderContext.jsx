@@ -1,60 +1,66 @@
-
-
 import { createContext, useState, useContext, useEffect } from "react"
 import { getOrders, createOrder, updateOrderStatus as apiUpdateOrderStatus } from "../services/api"
 
+// Contexto para los pedidos — este sirve como contenedor global
 const OrdersContext = createContext(undefined)
 
+// Este componente envuelve la aplicación y provee los pedidos
 export function OrdersProvider({ children }) {
-  const [orders, setOrders] = useState([])
+  const [ordersList, setOrdersList] = useState([])  // Nota: cambié el nombre solo para variar un poco
 
-  // Load orders from API on mount
   useEffect(() => {
-    async function fetchOrders() {
+    // Esto debería ejecutarse solo una vez al montar
+    const initFetch = async () => {
       try {
-        const ordersData = await getOrders()
-        setOrders(ordersData)
-      } catch (error) {
-        console.error("Failed to fetch orders:", error)
+        const fetchedOrders = await getOrders()
+        setOrdersList(fetchedOrders)
+      } catch (err) {
+        // Probablemente deberíamos notificar al usuario también
+        console.error("No se pudieron cargar los pedidos:", err)
       }
     }
 
-    fetchOrders()
+    initFetch()
   }, [])
 
-  // Add a new order
-  const addOrder = async (order) => {
+  // Función para agregar un nuevo pedido
+  const addOrder = async (orderData) => {
     try {
-      const newOrder = await createOrder(order)
-      setOrders((prev) => [...prev, newOrder])
-      return newOrder.id
-    } catch (error) {
-      console.error("Fallo al crear pedido:", error)
-      return null
+      const added = await createOrder(orderData)
+      // Añado a la lista actual — puede que luego necesitemos reordenar por fecha
+      setOrdersList(prevOrders => [...prevOrders, added])
+      return added.id
+    } catch (e) {
+      console.error("Error al intentar crear un nuevo pedido:", e)
+      return null  // no hay mucho más que hacer en este caso
     }
   }
 
-  // obtener order por su ID
-  const getOrder = (id) => {
-    return orders.find((order) => order.id === id)
+  // Devuelve el pedido con el ID indicado, si existe
+  const getOrderById = (orderId) => {
+    // Notar que esto no es muy eficiente si hay muchos pedidos
+    return ordersList.find(o => o.id === orderId)
   }
 
-  // actualiza el orden del estado
-  const updateOrderStatus = async (id, status) => {
+  // Cambia el estado del pedido — usualmente cuando avanza en el proceso
+  const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await apiUpdateOrderStatus(id, status)
-      setOrders((prev) => prev.map((order) => (order.id === id ? { ...order, status } : order)))
-    } catch (error) {
-      console.error("Failed to update order status:", error)
+      await apiUpdateOrderStatus(orderId, newStatus)
+      // Actualizamos localmente también para reflejar el cambio
+      setOrdersList(current => 
+        current.map(o => o.id === orderId ? { ...o, status: newStatus } : o)
+      )
+    } catch (err) {
+      console.error("No se pudo actualizar el estado del pedido:", err)
     }
   }
 
   return (
     <OrdersContext.Provider
       value={{
-        orders,
+        orders: ordersList,
         addOrder,
-        getOrder,
+        getOrder: getOrderById, // Nombrado un poco más explícitamente
         updateOrderStatus,
       }}
     >
@@ -63,11 +69,25 @@ export function OrdersProvider({ children }) {
   )
 }
 
-// Hook personalizado para ser usado
+// Hook para consumir el contexto — más limpio que usar useContext directamente
 export function useOrders() {
-  const context = useContext(OrdersContext)
-  if (!context) {
-    throw new Error("useOrders debe usarse dentro de un OrdersProvider")
+  const ctx = useContext(OrdersContext)
+
+  if (!ctx) {
+    // Esto puede pasar si alguien intenta usar el hook fuera del provider
+    throw new Error("useOrders debe ser usado dentro de un OrdersProvider — verifícalo en el árbol de componentes")
   }
-  return context
+
+  return ctx
 }
+
+
+
+/**
+Contexto de Orders
+Este usecontext maneja todo lo relacionado con las pedidos:
+- Lista de órdenes
+ - Crear nuevas órdenes
+- Buscar órdenes específicas
+- Actualizar el estado de las órdenes
+ */

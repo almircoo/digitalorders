@@ -14,7 +14,7 @@ export function RestaurantInvoiceViewer() {
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [selectedInvoice, setSelectedInvoice] = useState(null)
 
-  // Mock invoices data - in a real app, this would come from an API
+  // emula facturas del restaurntes
   const [invoices, setInvoices] = useState([
     {
       id: "inv-001",
@@ -54,7 +54,7 @@ export function RestaurantInvoiceViewer() {
     },
   ])
 
-  // Filter invoices based on active tab and search term
+  // Filtrado de facturas — por tab activo y término de búsqueda
   const filteredInvoices = invoices.filter((invoice) => {
     const searchLower = searchTerm.toLowerCase()
     const matchesSearch =
@@ -69,20 +69,21 @@ export function RestaurantInvoiceViewer() {
     return matchesSearch
   })
 
+  // Abre un modale n los detalles de la factura
   const openViewInvoice = (invoice) => {
     setSelectedInvoice(invoice)
     setViewDialogOpen(true)
   }
-
+  // Marca la factura como pagada
   const handlePayInvoice = async (id) => {
-    // Simulate API call
+    // simula la pago de factura de un 
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // Update invoice status
-    setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, status: "paid" } : inv)))
-
+    // actualiaza el estado de la factura a pagado
+    setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, status: "pagado" } : inv)))
+    // Si la factura actual es la que se pagó, también la actualizamos en el estado del modal
     if (selectedInvoice && selectedInvoice.id === id) {
-      setSelectedInvoice({ ...selectedInvoice, status: "paid" })
+      setSelectedInvoice({ ...selectedInvoice, status: "pagado" })
     }
   }
 

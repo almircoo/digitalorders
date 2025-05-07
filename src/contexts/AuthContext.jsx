@@ -4,27 +4,26 @@ import { useNavigate } from "react-router-dom"
 import { useToast } from "../components/ui/use-toast"
 import { login } from "../services/api"
 
+// Este contexto va a manejar todo lo relacionado con la autenticación
 const AuthContext = createContext(undefined)
-
-
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate()
   const { toast } = useToast()
 
-  // Initialize state from sessionStorage to persist across page refreshes
+  // Cargamos estado inicial desde sessionStorage, si existe algo guardado
   const [authState, setAuthState] = useState(() => {
-    // Try to get auth data from sessionStorage
-    const savedAuth = sessionStorage.getItem("authState")
-    if (savedAuth) {
+    const saved = sessionStorage.getItem("authState")
+
+    if (saved) {
       try {
-        return JSON.parse(savedAuth)
-      } catch (e) {
-        console.error("Error parsing saved auth state:", e)
+        return JSON.parse(saved)
+      } catch (err) {
+        console.error("No se pudo parsear el estado de auth guardado:", err)
       }
     }
 
-    // Default state if nothing in sessionStorage
+    // Default si no hay nada guardado
     return {
       user: null,
       accessToken: null,
@@ -34,50 +33,19 @@ export function AuthProvider({ children }) {
     }
   })
 
-  // Save auth state to sessionStorage whenever it changes
+  // Persistimos el estado en sessionStorage siempre que cambie
   useEffect(() => {
     if (authState.isAuthenticated) {
-      // Only save if authenticated to avoid overwriting with logged-out state
       sessionStorage.setItem("authState", JSON.stringify(authState))
-    } else if (sessionStorage.getItem("authState")) {
-      // Clear storage on logout
-      sessionStorage.removeItem("authState")
+    } else {
+      sessionStorage.removeItem("authState") // limpiamos si se cierra sesión
     }
   }, [authState])
 
-  // Check if token is expired or invalid with improved error handling
-  const isTokenValid = useCallback((token) => {
-    if (!token) return false
-
-    try {
-      // Basic format check
-      const parts = token.split(".")
-      if (parts.length !== 3) return false
-
-      // For mock tokens in preview mode, always return true
-      if (token === "mock-access-token") return true
-
-      // Try to decode the payload
-      const payload = JSON.parse(atob(parts[1]))
-
-      // Add debug logging
-      console.log("Token payload:", payload)
-      console.log("Token expiration:", payload.exp ? new Date(payload.exp * 1000).toLocaleString() : "No expiration")
-      console.log("Current time:", new Date().toLocaleString())
-      console.log("Is token valid:", payload.exp * 1000 > Date.now())
-
-      return payload.exp * 1000 > Date.now()
-    } catch (error) {
-      console.error("Token validation error:", error)
-      // If there's an error parsing the token, consider it valid to prevent immediate logout
-      return true
-    }
-  }, [])
-
-  // Sign out function
+  // Cerrar session
   const signOut = useCallback(() => {
-    console.log("Sign out called")
-    // Reset state and clear sessionStorage
+    console.log("Sesión cerrada manualmente")
+
     setAuthState({
       user: null,
       accessToken: null,
@@ -86,85 +54,55 @@ export function AuthProvider({ children }) {
       isAuthenticated: false,
     })
 
-    // Clear session storage
     sessionStorage.removeItem("authState")
 
     toast({
-      title: "Signed out",
-      description: "You have been signed out successfully",
+      title: "Sesión finalizada",
+      description: "Has salido correctamente",
     })
 
     navigate("/login")
   }, [navigate, toast])
 
-  // Auto-logout check on mount and when token changes
-  useEffect(() => {
-    // const validateSession = () => {
-    //   const { accessToken } = authState
+  // Validación periódica deshabilitada por ahora — revisar más adelante
 
-    //   // Add debug logging
-    //   console.log("Validating session, token exists:", !!accessToken)
-
-    //   if (accessToken && !isTokenValid(accessToken)) {
-    //     // Token expired or invalid, log out automatically
-    //     console.log("Session expired. Logging out automatically.")
-    //     signOut()
-    //   }
-    // }
-
-    // Don't validate immediately after component mount
-    // This gives time for the login process to complete
-    // const timeoutId = setTimeout(validateSession, 5000)
-
-    // // Set up periodic validation - increase interval to reduce chances of premature logout
-    // const intervalId = setInterval(validateSession, 1000000) // Check every 5 minutes instead of every minute
-
-    // return () => {
-    //   clearTimeout(timeoutId)
-    //   clearInterval(intervalId)
-    // }
-  }, [authState, isTokenValid, signOut])
-
-  // Sign in function with improved error handling
+  // Maneja el login del usuario
   const signIn = async (email, password, role, rememberMe = false) => {
-    setAuthState((prev) => ({ ...prev, loading: true }))
+    setAuthState(prev => ({ ...prev, loading: true }))
 
     try {
-      // Call the API login function
-      console.log("Attempting login with:", { email, role })
-      const response = await login(email, password, role)
-      console.log("Login response:", response)
+      console.log("Iniciando sesión con:", email, role)
+      const result = await login(email, password, role)
 
-      // Update state with the response data
-      const newAuthState = {
-        user: response.user,
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+      const newState = {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
         loading: false,
         isAuthenticated: true,
         rememberMe,
       }
-      console.log('User authe status', newAuthState)
-      setAuthState(newAuthState)
 
-      // If using mock data, ensure the token won't be considered expired
-      if (response.accessToken === "mock-access-token") {
-        console.log("Using mock token - session will be maintained")
-      }
+      setAuthState(newState)
 
       toast({
-        title: "Login successful",
-        description: `Welcome back! You are logged in as a ${role}.`,
+        title: "Inicio de sesión exitoso",
+        description: `Bienvenido de nuevo, rol: ${role}`,
       })
 
       return true
-    } catch (error) {
-      console.error("Login error details:", error)
-      setAuthState((prev) => ({ ...prev, loading: false, isAuthenticated: false }))
+    } catch (err) {
+      console.error("Error durante login:", err)
+
+      setAuthState(prev => ({
+        ...prev,
+        loading: false,
+        isAuthenticated: false,
+      }))
 
       toast({
-        title: "Login failed",
-        description: error.message || "Please check your credentials and try again",
+        title: "Error de inicio de sesión",
+        description: err.message || "Verifica tus datos e intenta de nuevo",
         variant: "destructive",
       })
 
@@ -172,20 +110,17 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Check if user has a specific role
-  const hasRole = useCallback(
-    (role) => {
-      return authState.user?.role === role
-    },
-    [authState.user],
-  )
-
-  // Get user's role
-  const getUserRole = useCallback(() => {
-    return authState.user?.role || null
+  // Chequea si el usuario tiene un rol específico
+  const hasRole = useCallback((roleName) => {
+    return authState.user?.role === roleName
   }, [authState.user])
 
-  // Auth context value
+  // Devuelve el rol actual del usuario
+  const getUserRole = useCallback(() => {
+    return authState.user?.role ?? null
+  }, [authState.user])
+
+  // Valores expuestos desde el contexto
   const value = {
     user: authState.user,
     accessToken: authState.accessToken,
@@ -202,11 +137,12 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-// funcion para ser llamdo dentro de otros componetes
+// Hook personalizado para usar el contexto
 export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+  const ctx = useContext(AuthContext)
+  if (!ctx) {
+    throw new Error("useAuth debe estar dentro de un AuthProvider")
   }
-  return context
+  return ctx
 }
+

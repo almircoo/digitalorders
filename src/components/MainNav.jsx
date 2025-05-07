@@ -2,15 +2,15 @@
 import { Link, useNavigate } from "react-router-dom"
 import { ShoppingCart, Search, User } from "lucide-react"
 
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
+import { Button } from "../components/ui/button"
+import { Input } from "../components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+} from "../components/ui/dropdown-menu"
 import { useAuth } from "../contexts/AuthContext"
 import { useCart } from "../contexts/CartContext"
 
@@ -57,7 +57,7 @@ export function MainNav() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  <span className="hidden md:inline capitalize">{user?.firstName || user?.role}</span>
+                  <span className="hidden md:inline capitalize">{ user?.firstName || user?.role}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

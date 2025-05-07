@@ -1,12 +1,15 @@
 
-
+/* 
+Este componente muestra una ventana de diálogo con toda la información
+ de un pedido: restaurante, ubicación, fecha, estado, productos y total.
+ */
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { CheckCircle, Clock, Package, Truck } from "lucide-react"
 
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 import { useOrders } from "../contexts/OrderContext"
 
 export default function OrderDetails() {

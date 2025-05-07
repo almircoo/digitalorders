@@ -1,7 +1,17 @@
+import React from "react"
 import { Button } from "../components/ui/button"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 
 export default function Home() {
+  // const [currentSlide, setCurrentSlide] = useState(0)
+
+  // // Images for the carousel
+  // const carouselImages = [
+  //   "https://img.freepik.com/premium-photo/woman-shopping-groceries-supermarket-with-shopping-basket-her-hand_604472-14946.jpg", 
+  //   "https://img.freepik.com/free-photo/woman-with-tablet-checking-shopping-cart-see-if-she-has-everything-she-needs-lunch_342744-1111.jpg", 
+    
+  // ]
+
   return (
     <MainLayout>
       <div className="container">
@@ -10,21 +20,21 @@ export default function Home() {
           <div className="mb-4 flex items-center justify-center gap-2">
             <div className="flex -space-x-2">
               <img
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://placehold.co/40x40"
                 alt="User"
                 width={40}
                 height={40}
                 className="rounded-full border-2 border-background"
               />
               <img
-                src="https://plus.unsplash.com/premium_photo-1689551670902-19b441a6afde?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://placehold.co/40x40"
                 alt="User"
                 width={40}
                 height={40}
                 className="rounded-full border-2 border-background"
               />
               <img
-                src="https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://placehold.co/40x40"
                 alt="User"
                 width={40}
                 height={40}
@@ -72,14 +82,14 @@ export default function Home() {
               <div className="mt-2 flex items-center">
                 <div className="flex -space-x-2">
                   <img
-                    src="/placeholder.svg?height=30&width=30"
+                    src="https://placehold.co/30x30"
                     alt="Ingredient"
                     width={30}
                     height={30}
                     className="rounded-full border-2 border-background"
                   />
                   <img
-                    src="/placeholder.svg?height=30&width=30"
+                    src="https://placehold.co/30x30"
                     alt="Ingredient"
                     width={30}
                     height={30}

@@ -17,7 +17,7 @@ import ProviderPanel from "../pages/ProviderPanel"
 import OrderDetails from "../pages/OrderDetails"
 import Settings from "../pages/Settings"
 import PasswordResetRequest from "../pages/PasswordResetRequest"
-
+import Checkout from "../pages/Checkout"
 // Auth components
 import { PrivateRoute } from "./PrivateRoute"
 import { RoleRoute } from "./RoleRoute"
@@ -36,6 +36,14 @@ function App() {
         <Route  path="/cart" element={
             <PrivateRoute>
               <Cart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <PrivateRoute>
+              <Checkout />
             </PrivateRoute>
           }
         />

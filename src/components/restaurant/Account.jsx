@@ -21,7 +21,7 @@ export function RestaurantAccountSettings() {
   const [formData, setFormData] = useState({
     // General info
     restaurantName: "Restaurant Example",
-    description: "We are a cozy restaurant specializing in traditional Peruvian cuisine with a modern twist.",
+    description: "Somos un acogedor restaurante especializado en cocina tradicional peruana con un toque moderno.",
     email: "contact@restaurantexample.com",
     phone: "+51 987 654 321",
     website: "www.restaurantexample.com",
@@ -52,24 +52,27 @@ export function RestaurantAccountSettings() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    // pendiente validationes de otro hook
+
+    // craga los datos 
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }))
   }
-
+  // para checkobox o switches
   const handleSwitchChange = (name, checked) => {
     setFormData((prev) => ({
       ...prev,
       [name]: checked,
     }))
   }
-
+  // Envia el formulario
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
+    // Simula llmada a un api, luego lanza el evento de success
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     toast({
@@ -79,12 +82,11 @@ export function RestaurantAccountSettings() {
 
     setIsLoading(false)
   }
-
+  // emula la carga de un imagen - logo de la cuenta
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
     if (file) {
       // In a real app, you would upload the file to a server
-      // For now, we'll just store it in state
       setFormData((prev) => ({
         ...prev,
         profileImage: URL.createObjectURL(file),

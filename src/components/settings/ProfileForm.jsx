@@ -5,7 +5,6 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useToast } from "../ui/use-toast"
 import { Loader2 } from "lucide-react"
-import { updateProfile } from "../../lib/api"
 import { useAuth } from "../../contexts/AuthContext"
 
 export function ProfileForm({ user }) {
@@ -23,6 +22,7 @@ export function ProfileForm({ user }) {
     zipCode: user?.zipCode || "",
   })
 
+  // Maneja los cambios
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -39,9 +39,6 @@ export function ProfileForm({ user }) {
       if (!accessToken) {
         throw new Error("No estás autenticado")
       }
-
-      // Call the API to update the profile
-      await updateProfile(accessToken, formData)
 
       toast({
         title: "Perfil actualizado",

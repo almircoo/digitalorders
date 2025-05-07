@@ -7,8 +7,8 @@ import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { useToast } from "../components/ui/use-toast"
-import { MainLayout } from "../components/MainLayout"
-import { requestPasswordReset } from "../lib/api"
+import { MainLayout } from "../layouts/MainLayout"
+// import { requestPasswordReset } from "../lib/api"
 
 export default function PasswordResetRequest() {
   const navigate = useNavigate()
@@ -22,7 +22,7 @@ export default function PasswordResetRequest() {
 
     try {
       // Call the API to request a password reset
-      await requestPasswordReset(email)
+      // await requestPasswordReset(email)
 
       toast({
         title: "Solicitud enviada",

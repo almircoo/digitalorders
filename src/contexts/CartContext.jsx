@@ -1,59 +1,70 @@
-
 import { createContext, useState, useContext } from "react"
 
+// Creamos el contexto del carrito de compras
 const CartContext = createContext(undefined)
 
-// Inicializar con un array vacio 
+// Este componente se encarga de envolver nuestra app con el contexto del carrito
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
+  const [cartItems, setCartItems] = useState([]) // empezamos con un carrito vacío
 
-  // Add item to cart
-  const addItem = (item) => {
-    // verifica si hay items
-    const existingIndex = items.findIndex((i) => i.id === item.id)
+  // Añadir producto al carrito
+  const addItem = (newItem) => {
+    const foundIndex = cartItems.findIndex(product => product.id === newItem.id)
 
-    if (existingIndex >= 0) {
-      // actualiza las cantidad si hay items de productos
-      updateQuantity(existingIndex, items[existingIndex].quantity + item.quantity)
+    if (foundIndex !== -1) {
+      // Si ya existe el producto, actualizamos su cantidad
+      const newQty = cartItems[foundIndex].quantity + newItem.quantity
+      updateQuantity(foundIndex, newQty)
     } else {
-      // agrega nuevos items al ya existente 
-      setItems((prev) => [...prev, item]) //conserva los datos 
+      // Si es nuevo, simplemente lo añadimos al final del array
+      setCartItems(prev => [...prev, newItem])
     }
   }
 
-  // Remove items del cart
-  const removeItem = (index) => {
-    setItems((prev) => {
-      const updated = [...prev]
-      updated.splice(index, 1)
-      return updated
+  // Eliminar producto por índice — esto podría mejorarse usando el id pero dejémoslo así por ahora
+  const removeItem = (itemIndex) => {
+    setCartItems(prev => {
+      const cloned = [...prev]  // No mutamos directamente el estado original
+      cloned.splice(itemIndex, 1)  // quitamos ese elemento
+      return cloned
     })
   }
 
-  // actauliza la cantidad de items en el cart
-  const updateQuantity = (index, quantity) => {
-    setItems((prev) => {
-      const updated = [...prev]
-      updated[index] = { ...updated[index], quantity }
-      return updated
+  // Modificar la cantidad de un producto específico
+  const updateQuantity = (index, newQuantity) => {
+    if (newQuantity <= 0) {
+      // En caso de que la cantidad sea 0 o menos, lo quitamos directamente
+      removeItem(index)
+      return
+    }
+
+    setCartItems(prevCart => {
+      const cartCopy = [...prevCart]
+      cartCopy[index] = {
+        ...cartCopy[index],
+        quantity: newQuantity,
+      }
+      return cartCopy
     })
   }
 
-  // limpia el carrito
+  // Vaciamos todo el carrito
   const clearCart = () => {
-    setItems([])
+    setCartItems([])  // más simple no se puede
   }
 
-  // Calculate cuantos itemes hay en el cart
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
+  // Total de artículos (no productos únicos, sino sumatoria de cantidades)
+  const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
 
-  // Calcula el precio total de los proctos en el cart
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  // Total de precio a pagar
+  const total = cartItems.reduce((acc, item) => {
+    return acc + (item.price * item.quantity)
+  }, 0)
 
   return (
     <CartContext.Provider
       value={{
-        items,
+        items: cartItems,
         addItem,
         removeItem,
         updateQuantity,
@@ -67,11 +78,11 @@ export function CartProvider({ children }) {
   )
 }
 
-// Hook - funcion pra ser usado en otro componente
+// Hook para acceder al carrito desde cualquier componente
 export function useCart() {
-  const context = useContext(CartContext)
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider")
+  const ctx = useContext(CartContext)
+  if (!ctx) {
+    throw new Error("useCart debe estar dentro de un CartProvider — verifica el árbol de componentes")
   }
-  return context
+  return ctx
 }

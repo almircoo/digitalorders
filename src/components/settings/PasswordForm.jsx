@@ -1,11 +1,9 @@
 
-
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useToast } from "../ui/use-toast"
 import { Loader2 } from "lucide-react"
-import { changePassword } from "../../lib/api"
 import { useAuth } from "../../contexts/AuthContext"
 
 export function PasswordForm() {
@@ -55,9 +53,6 @@ export function PasswordForm() {
       if (!accessToken) {
         throw new Error("No estás autenticado")
       }
-
-      // Call the API to change the password
-      await changePassword(accessToken, formData.currentPassword, formData.newPassword)
 
       toast({
         title: "Contraseña actualizada",

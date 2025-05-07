@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 import { Sidebar } from "../components/dashboard/Sidebar"
 import { Card, CardContent } from "../components/ui/card"
 import { Button } from "../components/ui/button"
@@ -23,11 +23,11 @@ export default function ProviderPanel() {
   const [providerOrders, setProviderOrders] = useState([])
   const [completedOrders, setCompletedOrders] = useState([])
 
-  // Add this near the top of the component function, after the useState declarations
+  // 
   const location = useLocation()
   const navigate = useNavigate()
 
-  // Mock profile data - in a real app, this would come from the user object
+  // perfil de emulacion
   const mockProfile = {
     name: user?.firstName + " " + user?.lastName || "Jane Smith",
     businessName: "Provider Company",
@@ -44,13 +44,13 @@ export default function ProviderPanel() {
     { title: "Mi cuenta", href: "/provider-panel/account" },
   ]
 
-  // Replace the existing useEffect that sets provider orders with this updated version
-  // that also handles tab selection based on URL
+ // Reemplazar el efecto de uso existente que establece los pedidos de proveedores con esta versión actualizada.
+// Que también gestiona la selección de pestañas según la URL.
   useEffect(() => {
-    // In a real app, you would filter by the actual provider ID
+    // agrega los pedios e
     setProviderOrders(orders)
 
-    // Initialize with empty array instead of loading from localStorage
+    // si los datos del arrays estan en 0 se crag estos datos
     if (completedOrders.length === 0) {
       setCompletedOrders([
         {
@@ -69,7 +69,7 @@ export default function ProviderPanel() {
       ])
     }
 
-    // Set active tab based on URL path
+    // regire a by tabs
     const path = location.pathname
     if (path.includes("/analytics")) {
       setActiveTab("analytics")
@@ -92,18 +92,15 @@ export default function ProviderPanel() {
     updateOrderStatus(orderId)
   }
 
+  // Acceptar orden
   const acceptOrder = (orderId) => {
     const acceptedOrder = orders.find((order) => order.id === orderId)
-
     if (!acceptedOrder) return
-
-    // Update status to "Registrado" for new delivery
+    // actualiza el "Registrado" para nuevas entewgas
     const updatedOrder = { ...acceptedOrder, status: "Registrado" }
-
-    // Add to completed orders
+    // agrrega el cmabio en los estados
     setCompletedOrders((prev) => [...prev, updatedOrder])
 
-    // No need to update localStorage
   }
 
   return (

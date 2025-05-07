@@ -1,7 +1,7 @@
 
 
 import { useState } from "react"
-import { MainLayout } from "../components/MainLayout"
+import { MainLayout } from "../layouts/MainLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Card, CardContent } from "../components/ui/card"
 import { ProfileForm } from "../components/settings/ProfileForm"

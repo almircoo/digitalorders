@@ -34,7 +34,7 @@ export function InvoiceManagement() {
     {
       id: "order-123456",
       restaurant: "Restaurante El Gourmet",
-      date: "2023-11-15",
+      date: "15-04-2025",
       total: 350.75,
       status: "Entregado",
       hasInvoice: true,
@@ -42,7 +42,7 @@ export function InvoiceManagement() {
     {
       id: "order-234567",
       restaurant: "Cocina Peruana",
-      date: "2023-11-20",
+      date: "18-04-2025",
       total: 425.3,
       status: "Entregado",
       hasInvoice: true,
@@ -50,7 +50,7 @@ export function InvoiceManagement() {
     {
       id: "order-345678",
       restaurant: "Sabores del Mar",
-      date: "2023-11-25",
+      date: "25-04-2025",
       total: 280.5,
       status: "Entregado",
       hasInvoice: false,
@@ -58,7 +58,7 @@ export function InvoiceManagement() {
     {
       id: "order-456789",
       restaurant: "La Buena Mesa",
-      date: "2023-11-30",
+      date: "28-04-2025",
       total: 520.0,
       status: "Entregado",
       hasInvoice: false,
@@ -125,7 +125,7 @@ export function InvoiceManagement() {
 
     return matchesSearch
   })
-
+  // carga los cambios en el formualrio
   const handleUploadFormChange = (e) => {
     const { name, value } = e.target
     setUploadForm((prev) => ({
@@ -133,7 +133,7 @@ export function InvoiceManagement() {
       [name]: value,
     }))
   }
-
+// maneja los cambios en los archivos
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -143,7 +143,7 @@ export function InvoiceManagement() {
       }))
     }
   }
-
+  // maneja cambios por cad selecion de
   const handleSelectChange = (name, value) => {
     setUploadForm((prev) => ({
       ...prev,
@@ -151,6 +151,7 @@ export function InvoiceManagement() {
     }))
   }
 
+  // abre el cuadro de dialogo para cargar el archivo
   const openUploadDialog = (orderId) => {
     const order = orders.find((o) => o.id === orderId)
 
