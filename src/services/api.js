@@ -109,7 +109,7 @@ export async function request(endpoint, { data = null, method = "GET" } = {}) {
   console.log(`API Simulada: ${method} ${endpoint}`)
 
 
-  // === AUTENTICACIÓN ===
+  // AUTENTICACIÓN
   if (endpoint === "/auth/login") {
     const { email, role } = data || {}
 

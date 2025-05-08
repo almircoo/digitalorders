@@ -19,6 +19,16 @@ step 4: Iniciar local host
 ``` shell
 pnpm run dev
 ```
+
+Credenciales para acceder a la pagina
+
+Restaurant 
+Email: restaurant@email.com
+Password: RestUser123
+Provider
+Email: provider@email.com
+Password: ProviUser123
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

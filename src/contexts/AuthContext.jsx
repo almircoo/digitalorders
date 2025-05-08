@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
 
     if (saved) {
       try {
-        return JSON.parse(saved)
+        return JSON.parse(saved) //Esto retorna el objeto  resultante de analizar la cadena
       } catch (err) {
         console.error("No se pudo parsear el estado de auth guardado:", err)
       }
@@ -137,7 +137,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-// Hook personalizado para usar el contexto
+// typo Hook personalizado para usar el contexto
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) {

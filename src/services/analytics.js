@@ -184,5 +184,5 @@ export const calculatePercentageChange = (current, previous) => {
   return (((current - previous) / previous) * 100).toFixed(1)
 }
 
-// Formateo rápido de moneda
+// Formateo de moneda
 export const formatCurrency = (value) => `S/. ${Number(value).toFixed(2)}`

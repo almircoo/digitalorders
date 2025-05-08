@@ -39,9 +39,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/checkout"
-          element={
+        <Route path="/checkout" element={
             <PrivateRoute>
               <Checkout />
             </PrivateRoute>
@@ -60,7 +58,7 @@ function App() {
           }
         />
 
-        {/* Role-specific routes */}
+        {/* Restaurnat routes */}
         <Route  path="/restaurant-panel/*" element={
             <RoleRoute allowedRoles={["restaurant"]}>
               <RestaurantPanel />

@@ -78,7 +78,7 @@ export function CartProvider({ children }) {
   )
 }
 
-// Hook para acceder al carrito desde cualquier componente
+// typo Hook para acceder al carrito desde cualquier componente
 export function useCart() {
   const ctx = useContext(CartContext)
   if (!ctx) {
