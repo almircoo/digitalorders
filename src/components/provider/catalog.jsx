@@ -28,7 +28,7 @@ const categories = [
 const initialCatalogs = {
   "catalog-1": {
     id: "catalog-1",
-    name: "Catálogo de Frutas",
+    name: "Catálogo 1",
     category: 2,
     items: [
       { name: "Manzana", quality: "Premium", quantity: "1", unit: "kg", price: "5.99" },
@@ -39,7 +39,7 @@ const initialCatalogs = {
   },
   "catalog-2": {
     id: "catalog-2",
-    name: "Catálogo de Verduras",
+    name: "Catálogo 2",
     category: 3,
     items: [
       { name: "Zanahoria", quality: "Orgánica", quantity: "1", unit: "kg", price: "2.99" },

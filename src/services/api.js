@@ -11,7 +11,7 @@ const mockData = {
   catalogs: [
     {
       id: "catalog-1",
-      name: "Catálogo de Frutas",
+      name: "Catálogo 1",
       category: 2,
       items: [
         { name: "Manzana", quality: "Premium", unit: "kg", price: 5.99 },
@@ -22,7 +22,7 @@ const mockData = {
     },
     {
       id: "catalog-2",
-      name: "Catálogo de Verduras",
+      name: "Catálogo 2",
       category: 3,
       items: [
         { name: "Zanahoria", quality: "Orgánica", unit: "kg", price: 2.99 },
@@ -33,7 +33,7 @@ const mockData = {
     },
     {
       id: "catalog-3",
-      name: "Catálogo de Lácteos",
+      name: "Catálogo 3",
       category: 4,
       items: [
         { name: "Leche", quality: "Entera", unit: "L", price: 4.25 },
@@ -78,7 +78,7 @@ const mockData = {
   lists: [
     {
       id: "list-1",
-      name: "Lista de Compras",
+      name: "Lista 1",
       category: 2,
       items: [],
     },
