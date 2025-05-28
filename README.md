@@ -23,11 +23,23 @@ pnpm run dev
 Credenciales para acceder a la pagina
 
 Restaurant 
+<<<<<<< HEAD
 Email: restaurant@email.com
 Password: RestUser123
 Provider
 Email: provider@email.com
 Password: ProviUser123
+=======
+```
+Email: restaurant@email.com
+Password: RestUser123
+```
+Provider
+```
+Email: provider@email.com
+Password: ProviUser123
+```
+>>>>>>> d765ccd4baf2a94b1f6b2fd2fb19ffd05bc91a3e
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
