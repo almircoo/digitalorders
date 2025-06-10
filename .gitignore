@@ -1,25 +1,116 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# frontend
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+frontend/
+frontend/node_modules/
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+frontend/src/components/ui/disabled/
+frontend/# Editor directories and files
+frontend/.vscode/*
+frontend/!.vscode/extensions.json
+frontend/.idea
+frontend/.DS_Store
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?
+frontend/.env
 
-node_modules/
-dist
-dist-ssr
-*.local
-src/components/ui/disabled/
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.env
+# backend
+backend/.env
+backend/*.log
+backend/*.pot
+backend/*.pyc
+backend/__pycache__
+backend/db.sqlite3
+backend/media
+# Backup files
+backend/*.bak
+# PyCharm
+backend/.idea/
+backend/*.iws
+backend/out/
+# Gradle
+backend/.idea/gradle.xml
+backend/.idea/libraries
+# File-based project format
+backend/*.iws
+# IntelliJ
+backend/out/
+# JIRA plugin
+backend/atlassian-ide-plugin.xml
+Python
+backend/*.py[cod]
+backend/*$py.class
+# Distribution / packaging
+backend/.Python
+backend/build/
+backend/develop-eggs/
+backend/dist/
+backend/downloads/
+backend/eggs/
+backend/.eggs/
+backend/lib/
+backend/lib64/
+backend/parts/
+backend/sdist/
+backend/var/
+backend/wheels/
+backend/*.egg-info/
+backend/.installed.cfg
+backend/*.egg
+backend/*.manifest
+backend/*.spec
+backend/db.sqlite3
+backend/# Installer logs
+backend/pip-log.txt
+backend/pip-delete-this-directory.txt
+# Unit test / coverage reports
+backend/htmlcov/
+backend/.tox/
+backend/.coverage
+backend/.coverage.*
+backend/.cache
+backend/.pytest_cache/
+backend/nosetests.xml
+backend/coverage.xml
+backend/*.cover
+backend/.hypothesis/
+# Jupyter Notebook
+backend/.ipynb_checkpoints
+# pyenv
+backend/.python-version
+# celery
+backend/celerybeat-schedule.*
+# SageMath parsed files
+backend/*.sage.py
+# Environments
+backend/.env
+backend/.venv
+backend/env/
+backend/venv/
+backend/ENV/
+backend/env.bak/
+backend/venv.bak/
+
+# Sublime Text
+backend/*.tmlanguage.cache
+backend/*.tmPreferences.cache
+backend/*.stTheme.cache
+backend/*.sublime-workspace
+backend/*.sublime-project
+# Visual Studio Code
+backend/.vscode/
+backend/!.vscode/settings.json
+backend/!.vscode/tasks.json
+backend/!.vscode/launch.json
+backend/!.vscode/extensions.json
+backend/.history
