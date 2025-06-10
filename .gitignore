@@ -29,7 +29,9 @@ backend/.env
 backend/*.log
 backend/*.pot
 backend/*.pyc
-backend/__pycache__
+__pycache__
+*/__pycache__/
+backend/core/__pycache__/
 backend/db.sqlite3
 backend/media
 # Backup files
@@ -114,3 +116,5 @@ backend/!.vscode/tasks.json
 backend/!.vscode/launch.json
 backend/!.vscode/extensions.json
 backend/.history
+
+venv
