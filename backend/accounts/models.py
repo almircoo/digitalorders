@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from cloudinary.models import CloudinaryField
 import uuid
+import secrets
+from datetime import timedelta
+from django.utils import timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, first_name, last_name, email, password=None, role=None, **extra_fields):
@@ -75,13 +78,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
-
 class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
     phone = models.CharField(max_length=20, blank=True, verbose_name="Personal Phone")
     address = models.TextField(max_length=100, blank=True, verbose_name="Personal Address")
     city = models.CharField(max_length=100, blank=True, verbose_name="Personal City")
     country = models.CharField(max_length=100, blank=True, verbose_name="Personal Country")
     zip_code = models.CharField(max_length=20, blank=True, verbose_name="Personal Zip Code")
+
+    is_email_verified = models.BooleanField(default=False)
+    email_verified_at = models.DateTimeField(null=True, blank=True)
+    
     # for Tracking ip
     latitude = models.CharField(max_length=20, blank=True, null=True)
     longitude = models.CharField(max_length=20, blank=True, null=True)
@@ -195,3 +202,45 @@ class RestaurantProfile(models.Model):
     
     def __str__(self):
         return self.restaurant_name
+    
+class EmailVerificationToken(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_tokens')
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = secrets.token_urlsafe(32)
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=24)
+        super().save(*args, **kwargs)
+    
+    def is_valid(self):
+        return not self.is_used and self.expires_at > timezone.now()
+
+class PasswordResetToken(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reset_tokens')
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = secrets.token_urlsafe(32)
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=2)
+        super().save(*args, **kwargs)
+    
+    def is_valid(self):
+        return not self.is_used and self.expires_at > timezone.now()
