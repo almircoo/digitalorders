@@ -1,7 +1,6 @@
-
 import { useState} from "react"
 import { Link, useNavigate} from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, Controller} from "react-hook-form"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "../components/ui/button"
@@ -14,24 +13,26 @@ import { MainLayout } from "../layouts/MainLayout"
 import { useAuth } from "../contexts/AuthContext"
 import { useToast } from "../components/ui/use-toast"
 
-export default function Login() {
+// Role mapping constants
+const ROLE_MAPPING = {
+  restaurant: 1,  // Frontend string -> Backend integer
+  provider: 2    // Frontend string -> Backend integer
+}
 
+export default function Login() {
   const navigate = useNavigate()
-  // const location = useLocation()
   const { signIn } = useAuth()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [role, setRole] = useState("restaurant")
+  // const [role, setRole] = useState("restaurant")
   const [rememberMe, setRememberMe] = useState(false)
 
-  // navega por defest al home
-  // const from = location.state?.from?.pathname || "/"
-
   // React Hook Form setup
-  const {register, handleSubmit, formState: { errors },} = useForm({
+  const {register, handleSubmit, control, formState: { errors },} = useForm({
     defaultValues: {
       email: "",
       password: "",
+      role: "restaurant", // Frontend uses string values
     },
   })
 
@@ -39,33 +40,35 @@ export default function Login() {
     setLoading(true)
 
     try {
-      // simula llamda progacion de api
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Llamar a la función signIn desde el authContext
-      const success = await signIn(data.email, data.password, role, rememberMe)
-
+      // Keep the original string role for frontend routing
+      const roleString = data.role // "restaurant" or "provider"
+      
+      // Convert to integer only for backend API call
+      const backendRoleId = ROLE_MAPPING[roleString]
+      
+      console.log("Role conversion:", { roleString, backendRoleId })
+      
+      // Send integer role to backend
+      const success = await signIn(data.email, data.password, backendRoleId, rememberMe)
+      
+      console.log("Login success:", { success, roleString })
+      
       if (success) {
-        toast({
-          title: "Login successful",
-          description: "Welcome back!",
-        })
-
-        // Redirige al panel segun registro
-        const roleBasedPath = `/${role}-panel`
+        // Always use the string role for frontend routing
+        const roleBasedPath = `/${roleString}-panel`
+        console.log("Redirecting to:", roleBasedPath)
         navigate(roleBasedPath, { replace: true })
       }
     } catch (error) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again",
+        description: error.message || "Please check your credentials and try again",
         variant: "destructive",
       })
     } finally {
       setLoading(false)
     }
   }
-
 
   return (
     <MainLayout>
@@ -110,15 +113,25 @@ export default function Login() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="role">Tipo de Cuenta</Label>
-                <Select value={role} onValueChange={setRole}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select account type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                    <SelectItem value="provider">Proveedor</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="role"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona tipo de cuenta" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="restaurant">Restaurant</SelectItem>
+                        <SelectItem value="provider">Proveedor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.role && <p className="text-sm text-red-500">{errors.role.message}</p>}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">

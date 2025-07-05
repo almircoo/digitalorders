@@ -27,11 +27,11 @@ export default function RestaurantPanel() {
   const navigate = useNavigate()
 
   // Mock profile data - in a real app, this would come from the user object
-  const mockProfile = {
-    name: user?.firstName + " " + user?.lastName || "John Doe",
-    businessName: "Restaurant Example",
-    role: "restaurant",
-  }
+  // const mockProfile = {
+  //   name: user?.firstName + " " + user?.lastName || "John Doe",
+  //   businessName: "Restaurant Example",
+  //   role: "restaurant",
+  // }
 
   // Updated sidebar items - removed promotions
   const sidebarItems = [
@@ -72,7 +72,7 @@ export default function RestaurantPanel() {
           {/* Sidebar */}
           <div className="md:col-span-1">
             <div className="sticky top-20">
-              <Sidebar items={sidebarItems} userInfo={mockProfile} />
+              <Sidebar items={sidebarItems} />
             </div>
           </div>
 

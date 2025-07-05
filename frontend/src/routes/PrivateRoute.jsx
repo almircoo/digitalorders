@@ -4,11 +4,11 @@ import { Navigate, useLocation } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 
 export function PrivateRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, isInitializing } = useAuth()
   const location = useLocation()
 
   // verifica si el sistema esta cargando información de autenticación
-  if (loading) {
+  if (isInitializing) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
   }
 

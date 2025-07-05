@@ -18,6 +18,7 @@ import OrderDetails from "../pages/OrderDetails"
 import Settings from "../pages/Settings"
 import PasswordResetRequest from "../pages/PasswordResetRequest"
 import Checkout from "../pages/Checkout"
+import ConfirmEmail from "../pages/ConfirmEmail"
 // Auth components
 import { PrivateRoute } from "./PrivateRoute"
 import { RoleRoute } from "./RoleRoute"
@@ -31,6 +32,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/password-reset-request" element={<PasswordResetRequest />} />
+        <Route path="/verify-email" element={<ConfirmEmail />} />
 
         {/* Protected routes - require authentication */}
         <Route  path="/cart" element={

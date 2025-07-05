@@ -11,15 +11,16 @@ export default defineConfig({
     },
   },
   // api server
-  server: {
-    proxy: {
-      '/auth': {
-        target: 'https://digitalorderapi.up.railway.app',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/auth/, '')
-      }
-    }
-  },
+  // server: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://localhost:800',
+  //       changeOrigin: true,
+  //       secure: false,
+  //       // rewrite: (path) => path.replace(/^\/api/, '')
+  //     }
+  //   }
+  // },
 })
 
 

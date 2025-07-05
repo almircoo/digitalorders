@@ -4,13 +4,14 @@ import { useState } from "react"
 import { MainLayout } from "../layouts/MainLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Card, CardContent } from "../components/ui/card"
+//mport { AccountSettings } from "../components/settings/AccountSettings"
 import { ProfileForm } from "../components/settings/ProfileForm"
 import { PasswordForm } from "../components/settings/PasswordForm"
 import { useAuth } from "../contexts/AuthContext"
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile")
-  const { user } = useAuth()
+  const { user} = useAuth()
 
   return (
     <MainLayout>
@@ -21,13 +22,13 @@ export default function Settings() {
           <CardContent className="p-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="mb-6">
-                <TabsTrigger value="profile">Perfil</TabsTrigger>
+                <TabsTrigger value="profile">Perfil Administrador</TabsTrigger>
                 <TabsTrigger value="password">Contraseña</TabsTrigger>
                 <TabsTrigger value="preferences">Preferencias</TabsTrigger>
               </TabsList>
 
               <TabsContent value="profile">
-                <ProfileForm user={user} />
+                {user && <ProfileForm user={user} />}
               </TabsContent>
 
               <TabsContent value="password">

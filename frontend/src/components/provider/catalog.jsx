@@ -10,7 +10,7 @@ import { Label } from "../ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { useToast } from "../ui/use-toast"
-import { getCatalogs, createCatalog, updateCatalog } from "../../services/api"
+import { getCatalogs, createCatalog, updateCatalog } from "../../components/ui/api"
 
 const categories = [
   { id: 1, icon: "🥩", name: "Carnes" },

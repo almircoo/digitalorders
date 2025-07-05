@@ -6,7 +6,7 @@ import { useToast } from "../components/ui/use-toast"
 import { useEffect } from "react"
 
 export function RoleRoute({ children, allowedRoles }) {
-  const { isAuthenticated, loading, getUserRole } = useAuth()
+  const { isAuthenticated, loading, isInitializing, getUserRole } = useAuth()
   const location = useLocation()
   const { toast } = useToast()
 
@@ -24,7 +24,7 @@ export function RoleRoute({ children, allowedRoles }) {
   }, [isAuthenticated, loading, currentRole, allowedRoles, toast])
 
   // verrifica la caraga de la informacion al authenticar
-  if (loading) {
+  if (isInitializing) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
   }
 

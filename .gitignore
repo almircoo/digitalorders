@@ -23,7 +23,7 @@ frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
 frontend/.env
-
+Code.txt
 # backend
 backend/.env
 backend/*.log

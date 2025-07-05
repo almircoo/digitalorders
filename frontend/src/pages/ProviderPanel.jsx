@@ -12,12 +12,12 @@ import { ProviderCatalog } from "../components/provider/catalog"
 import { OrderDetails } from "../components/OrderDetails"
 import { ProviderAnalytics } from "../components/analitycs/ProviderAnalitics"
 import { useLocation } from "react-router-dom"
-import { AccountSettings } from "../components/provider/Account"
+import { ProviderAccountSettings } from "../components/provider/Account"
 import { Promotions } from "../components/provider/Promotions"
 import { InvoiceManagement } from "../components/provider/InvoiceMannager"
 
 export default function ProviderPanel() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const { orders, updateOrderStatus } = useOrders()
   const [activeTab, setActiveTab] = useState("catalog")
   const [providerOrders, setProviderOrders] = useState([])
@@ -28,9 +28,15 @@ export default function ProviderPanel() {
   const navigate = useNavigate()
 
   // perfil de emulacion
-  const mockProfile = {
-    name: user?.firstName + " " + user?.lastName || "Jane Smith",
-    businessName: "Provider Company",
+  // const mockProfile = {
+  //   name: user?.firstName + " " + user?.lastName || "Jane Smith",
+  //   businessName: "Provider Company",
+  //   role: "provider",
+  // }
+
+  const userInfo = {
+    name: `${user?.first_name || ""} ${user?.last_name || ""}`.trim() || user?.email,
+    businessName: profile?.provider?.company_name || "Mi Empresa",
     role: "provider",
   }
 
@@ -110,7 +116,7 @@ export default function ProviderPanel() {
           {/* Sidebar */}
           <div className="md:col-span-1">
             <div className="sticky top-20">
-              <Sidebar items={sidebarItems} userInfo={mockProfile} />
+              <Sidebar items={sidebarItems} />
             </div>
           </div>
 
@@ -249,7 +255,7 @@ export default function ProviderPanel() {
               </TabsContent>
 
               <TabsContent value="account">
-                <AccountSettings />
+                <ProviderAccountSettings />
               </TabsContent>
             </Tabs>
           </div>

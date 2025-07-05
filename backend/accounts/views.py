@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.serializers import ValidationError
 
 from django.db import transaction
 from django.conf import settings
@@ -166,7 +167,7 @@ class EmailVerificationConfirmView(APIView):
         try:
             serializer.is_valid(raise_exception=True)
             token_obj = serializer.token_obj # Access the stored token object
-        except serializer.ValidationError as e:
+        except ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
@@ -194,7 +195,7 @@ class EmailVerificationConfirmView(APIView):
         try:
             serializer.is_valid(raise_exception=True)
             token_obj = serializer.token_obj
-        except serializer.ValidationError as e:
+        except ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
@@ -293,3 +294,8 @@ class ChangePasswordView(APIView):
             {"message": "Password changed successfully."},
             status=status.HTTP_200_OK
         )
+
+
+# Update profile
+class UpdateProfile():
+    pass

@@ -117,13 +117,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
-
+    role = serializers.IntegerField()
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
+        role = data.get('role')
+
+        if role not in [User.RESTAURANT, User.PROVIDER]:
+            raise serializers.ValidationError('Invalid role.')
 
         if email and password:
-            user = authenticate(request=self.context.get('request'), email=email, password=password)
+            user = authenticate(request=self.context.get('request'), email=email, password=password, role=role)
             if not user:
                 raise serializers.ValidationError('Invalid login credentials.')
             # Crucial check: User must be active (email verified) to log in

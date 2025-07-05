@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react"
-import { getOrders, createOrder, updateOrderStatus as apiUpdateOrderStatus } from "../services/api"
+import { getOrders, createOrder, updateOrderStatus as apiUpdateOrderStatus } from "../components/ui/api"
 
 // Contexto para los pedidos — este sirve como contenedor global
 const OrdersContext = createContext(undefined)

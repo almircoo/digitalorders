@@ -23,6 +23,10 @@ export function MainNav() {
     signOut()
   }
 
+  const userDisplayName = user?.first_name 
+    ? `${user.first_name} ${user.last_name || ''}`.trim() 
+    : (user?.email || "My Account");
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -57,7 +61,7 @@ export function MainNav() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  <span className="hidden md:inline capitalize">{ user?.firstName || user?.role}</span>
+                  <span className="hidden md:inline capitalize">{ userDisplayName }</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

@@ -13,7 +13,7 @@ export function Sidebar({ items, userInfo }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { toast } = useToast()
-  const { signOut } = useAuth()
+  const {user, profile, signOut } = useAuth()
 
   const handleSignOut = () => {
     // aqui logica de logout
@@ -24,14 +24,21 @@ export function Sidebar({ items, userInfo }) {
     })
     navigate("/login")
   }
+  const userName = user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : "Current User";
+
+  const businessName = profile
+  ? (user?.role === 'restaurant'
+      ? profile.restaurant?.restaurant_name
+      : profile.provider?.company_name) || "Mi Negocio"
+  : "Loading Business...";
 
   return (
     <Card className="flex h-full flex-col justify-between rounded-xl border p-4">
       <div>
         <div className="mb-6">
-          <p className="font-bold capitalize">{userInfo.name}</p>
+          <p className="font-bold capitalize">{userName}</p>
           <hr className="my-2" />
-          <p className="text-primary font-semibold">{userInfo.businessName}</p>
+          <p className="text-primary font-semibold">{businessName}</p>
         </div>
 
         <nav className="space-y-1">
